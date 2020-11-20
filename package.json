@@ -20,7 +20,7 @@
     "*.json",
     "*.js"
   ],
-  "main": "./dist/vr-select.umd.js",
+  "main": "src/main.js",
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
