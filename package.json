@@ -4,7 +4,7 @@
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --inline-vue --name vr-select src/main.js",
+    "build": "vue-cli-service build --target lib --inline-vue --name vr-select ./src/components/index.js",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
@@ -13,7 +13,14 @@
     "vue": "^2.6.11",
     "vue-tippy": "^4.7.2"
   },
-  "main": "./vr-select.umd.js",
+  "files": [
+    "dist/*",
+    "src/*",
+    "public/*",
+    "*.json",
+    "*.js"
+  ],
+  "main": "./dist/vr-select.umd.js",
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
