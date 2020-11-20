@@ -1,8 +1,10 @@
 /* eslint-disable */
 import Button from "./components/button";
+import Select from "./components/select";
 
 const components = {
-  Button
+  Button,
+  Select
 };
 
 components.install = (Vue, options = {}) => {
