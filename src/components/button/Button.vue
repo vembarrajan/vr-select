@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'RbButton',
+  name: 'VrButton',
   props: {
     text: String,
     size: {
