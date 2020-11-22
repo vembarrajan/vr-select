@@ -3,14 +3,40 @@
   <div class="vr-select-container">
     <div class="select-container" :name="id" :id="id">
       <slot name="trigger">
-        <p>{{value && value.label}} Tippy Trigger</p>
+        <p>{{ value && value.label }} Tippy Trigger</p>
       </slot>
     </div>
-    <tippy :to="id" distant="0" trigger="click"
-    interactive="true" theme="light" placement="bottom">
-      <div v-for="option in options" :id="option.label"
-        :key="option.label" @click="clicked(option)">
-        {{option.label}}
+    <tippy
+      class="dropdown-content u-overflow-auto u-max-height-400"
+      :to="id"
+      distant="0"
+      trigger="click"
+      interactive="true"
+      theme="dropdown"
+      placement="bottom-start"
+    >
+      <div
+        v-for="option in options_"
+        :id="option.label"
+        :key="option.label"
+        @click="clicked(option)"
+        v-if="!groupByKey"
+        class="select__dropdown-list-item"
+      >
+        {{ option.label }}
+      </div>
+      <div
+        v-for="(option, value, $index) in options_"
+        :id="option.label"
+        :key="option.label"
+        v-if="groupByKey"
+      >
+        <section>
+          <p @click="option.open = !option.open" v-show="value != 'undefined'" class="select__dropdown-list-heading">{{ value }}</p>
+          <div v-show="option.open" v-for="item in option.list" :key="item.label" @click="clicked(item)" class="select__dropdown-list-item">
+            {{ item.label }}
+          </div>
+        </section>
       </div>
     </tippy>
   </div>
@@ -24,13 +50,37 @@ export default {
   props: {
     msg: String,
     options: Array,
-    value: Object
+    value: Object,
+    groupByKey: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
       id: `vrSelect${this._uid}`,
       instance: null,
+      options_: [],
     };
+  },
+  created() {
+    console.log(this.groupByKey);
+    if (this.groupByKey) {
+      this.options_ = this.options.reduce((acc, item) => {
+        if (acc[item.view]) {
+          acc[item.view]["list"].push(item);
+        } else {
+          acc[item.view] = {};
+          acc[item.view]["open"] = true;
+          acc[item.view]["list"] = [];
+          acc[item.view]["list"].push(item);
+        }
+        return acc;
+      }, {});
+      console.log(this.options_);
+    } else {
+      this.options_ = [...newValue];
+    }
   },
   mounted() {
     // const button = document.querySelector(this.id);
@@ -44,32 +94,54 @@ export default {
   methods: {
     clicked(data) {
       console.log(data, this.selected);
-      this.$emit('input', data);
+      this.$emit("input", data);
+      this.$emit("onChange", data);
       this.instance.hide();
     },
     onMount(data) {
       console.log(data, "onMount");
     },
   },
+  watch: {
+    options(newValue) {
+      if (this.groupByKey) {
+        this.options_ = this.options.reduce((acc, item) => {
+          if (acc[item.view]) {
+            acc[item.view]["list"].push(item);
+          } else {
+            acc[item.view] = {};
+            acc[item.view]["open"] = true;
+            acc[item.view]["list"] = [];
+            acc[item.view]["list"].push(item);
+          }
+          return acc;
+        }, {});
+        console.log(this.options_);
+      } else {
+        this.options_ = [...newValue];
+      }
+    },
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-import "tippy.js/themes/light.css";
 <style scoped lang="scss">
-
-h3 {
-  margin: 40px 0 0;
+.tippy-tooltip {
+  padding: 0px !important;
+  background: white !important;
+  .tippy-tooltip {
+    .light-theme[data-animatefill] {
+      background: white !important;
+    }
+  }
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.select__dropdown-list-heading {
+  padding: 8px 24px!important;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.select__dropdown-list-item:hover {
+  color: white;
 }
-a {
-  color: #42b983;
+.active {
 }
 </style>
