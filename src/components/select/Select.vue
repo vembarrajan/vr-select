@@ -16,7 +16,6 @@
       interactive="true"
       theme="dropdown"
       placement="bottom-start"
-      :options="{}"
     >
       <div
         v-for="option in options_"
@@ -26,7 +25,11 @@
         v-if="!groupByKey"
         class="select__dropdown-list-item"
       >
-        {{ option.label }}
+      <slot v-bind="option" name="item">
+        <div slot="label">
+          {{ option.label }}
+        </div>
+      </slot>
       </div>
       <div
         v-for="(option, value, $index) in options_"
@@ -53,7 +56,11 @@
             @click="clicked(item)"
             class="select__dropdown-list-item"
           >
-            {{ item.label }}
+            <slot v-bind="item" name="item">
+              <div slot="label">
+                {{ item.label }}
+              </div>
+            </slot>
           </div>
         </section>
       </div>
