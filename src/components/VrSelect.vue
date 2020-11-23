@@ -1,12 +1,13 @@
 /* eslint-disable */
 <template>
   <div class="vr-select-container">
-    <div class="select-container" :name="id" :id="id">
+    <div class="select-container" v-if="id" :name="id" :id="id">
       <slot name="trigger">
         <p>{{ value && value.label }} Tippy Trigger</p>
       </slot>
     </div>
     <tippy
+      v-if="id"
       style="margin: 4px 0 0 0"
       class="dropdown-content u-overflow-auto u-max-height-400"
       :to="id"
@@ -15,6 +16,7 @@
       interactive="true"
       theme="dropdown"
       placement="bottom-start"
+      :options="{}"
     >
       <div
         v-for="option in options_"
@@ -38,8 +40,11 @@
             @click="option.open = !option.open"
             v-show="value != 'undefined'"
             class="select__dropdown-list-heading"
+            style=" display: flex; justify-content: space-between; "
           >
             {{ value }}
+            <rb-icon style=" margin-left: 12px; " v-if="option.open" :icon="'arrow1-down'" class="rb-icon--small u-color-grey-light"></rb-icon>
+            <rb-icon style=" margin-left: 12px; " v-if="!option.open" :icon="'arrow1-up'" class="rb-icon--small u-color-grey-light"></rb-icon>
           </p>
           <div
             v-show="option.open"
@@ -55,11 +60,10 @@
     </tippy>
   </div>
 </template>
-
 <script>
 /* eslint-disable */
 import { tippy } from "vue-tippy";
-export default {
+  export default {
   name: "VrSelect",
   props: {
     msg: String,
@@ -72,7 +76,7 @@ export default {
   },
   data() {
     return {
-      id: `vrSelect${this._uid}`,
+      id: null,
       instance: null,
       options_: [],
     };
@@ -93,24 +97,29 @@ export default {
       }, {});
       console.log(this.options_);
     } else {
-      this.options_ = [...newValue];
+      this.options_ = this.options;
     }
   },
   mounted() {
     // const button = document.querySelector(this.id);
     // const instance = tippy(button);
-
-    const button = document.querySelector("#" + this.id);
-    tippy(button);
-    this.instance = button._tippy;
-    console.log(this.instance, this.selected, this.value);
+    this.id = 'hello' + Math.floor(Math.random() * 1000 )+ 'ciq';
+    this.$nextTick(() => {
+        const button = document.querySelector("#" + this.id);
+        if (button) {
+          console.log(this.id, button)
+          tippy(button);
+          this.instance = button._tippy;
+          console.log(this.instance, this.selected, this.value);
+        }
+    })
   },
   methods: {
     clicked(data) {
       console.log(data, this.selected);
       this.$emit("input", data);
       this.$emit("onChange", data);
-      this.instance.hide();
+      this.instance?.hide();
     },
     onMount(data) {
       console.log(data, "onMount");
@@ -138,7 +147,6 @@ export default {
   },
 };
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .dropdown-theme {
@@ -154,11 +162,11 @@ export default {
   }
 }
 .select__dropdown-list-heading {
+  cursor: pointer;
   padding: 8px 24px !important;
 }
 .select__dropdown-list-item:hover {
   color: white;
 }
-.active {
-}
+
 </style>
