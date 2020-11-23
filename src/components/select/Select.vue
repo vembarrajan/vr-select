@@ -7,6 +7,7 @@
       </slot>
     </div>
     <tippy
+      style="margin: 4px 0 0 0"
       class="dropdown-content u-overflow-auto u-max-height-400"
       :to="id"
       distant="0"
@@ -30,10 +31,26 @@
         :id="option.label"
         :key="option.label"
         v-if="groupByKey"
+        style="margin: 8px 0px"
       >
         <section>
-          <p @click="option.open = !option.open" v-show="value != 'undefined'" class="select__dropdown-list-heading">{{ value }}</p>
-          <div v-show="option.open" v-for="item in option.list" :key="item.label" @click="clicked(item)" class="select__dropdown-list-item">
+          <p
+            @click="option.open = !option.open"
+            v-show="value != 'undefined'"
+            class="select__dropdown-list-heading"
+            style=" display: flex; justify-content: space-between; "
+          >
+            {{ value }}
+            <rb-icon style=" margin-left: 12px; " v-if="option.open" :icon="'arrow1-down'" class="rb-icon--small u-color-grey-light"></rb-icon>
+            <rb-icon style=" margin-left: 12px; " v-if="!option.open" :icon="'arrow1-up'" class="rb-icon--small u-color-grey-light"></rb-icon>
+          </p>
+          <div
+            v-show="option.open"
+            v-for="item in option.list"
+            :key="item.label"
+            @click="clicked(item)"
+            class="select__dropdown-list-item"
+          >
             {{ item.label }}
           </div>
         </section>
@@ -67,13 +84,13 @@ export default {
     console.log(this.groupByKey);
     if (this.groupByKey) {
       this.options_ = this.options.reduce((acc, item) => {
-        if (acc[item.view]) {
-          acc[item.view]["list"].push(item);
+        if (acc[item[this.groupByKey]]) {
+          acc[item[this.groupByKey]]["list"].push(item);
         } else {
-          acc[item.view] = {};
-          acc[item.view]["open"] = true;
-          acc[item.view]["list"] = [];
-          acc[item.view]["list"].push(item);
+          acc[item[this.groupByKey]] = {};
+          acc[item[this.groupByKey]]["open"] = true;
+          acc[item[this.groupByKey]]["list"] = [];
+          acc[item[this.groupByKey]]["list"].push(item);
         }
         return acc;
       }, {});
@@ -106,13 +123,13 @@ export default {
     options(newValue) {
       if (this.groupByKey) {
         this.options_ = this.options.reduce((acc, item) => {
-          if (acc[item.view]) {
-            acc[item.view]["list"].push(item);
+          if (acc[item[this.groupByKey]]) {
+            acc[item[this.groupByKey]]["list"].push(item);
           } else {
-            acc[item.view] = {};
-            acc[item.view]["open"] = true;
-            acc[item.view]["list"] = [];
-            acc[item.view]["list"].push(item);
+            acc[item[this.groupByKey]] = {};
+            acc[item[this.groupByKey]]["open"] = true;
+            acc[item[this.groupByKey]]["list"] = [];
+            acc[item[this.groupByKey]]["list"].push(item);
           }
           return acc;
         }, {});
@@ -127,6 +144,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.dropdown-theme {
+  margin: 8px 0px;
+}
 .tippy-tooltip {
   padding: 0px !important;
   background: white !important;
@@ -137,7 +157,8 @@ export default {
   }
 }
 .select__dropdown-list-heading {
-  padding: 8px 24px!important;
+  cursor: pointer;
+  padding: 8px 24px !important;
 }
 .select__dropdown-list-item:hover {
   color: white;
