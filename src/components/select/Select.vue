@@ -2,8 +2,8 @@
 <template>
   <div class="vr-select-container">
     <div class="select-container" v-if="id" :name="id" :id="id">
-      <slot name="trigger">
-        <p>{{ value && value.label }} Tippy Trigger</p>
+      <slot name="trigger" class="triggerWrapper">
+        <p>{{ value && value.label }} Slot for Trigger</p>
       </slot>
     </div>
     <tippy
@@ -14,8 +14,21 @@
       distant="0"
       trigger="click"
       interactive="true"
-      theme="dropdown"
+      theme="dropdown vr-select"
       placement="bottom-start"
+      animationFill="false"
+      animation="fade"
+      :duration='0'
+      popperOptions="{
+          modifiers: {
+            preventOverflow: {
+              enabled: false
+            },
+            hide: {
+              enabled: false
+            }
+          }
+        }"
     >
       <div
         v-for="option in options_"
@@ -174,6 +187,12 @@ import { tippy } from "vue-tippy";
 }
 .select__dropdown-list-item:hover {
   color: white;
+}
+
+.vr-select-dropdown-theme {
+  .tippy-content{
+    min-width: 230px;
+  }
 }
 
 </style>
