@@ -59,8 +59,8 @@
             style=" display: flex; justify-content: space-between; "
           >
             {{ value }}
-            <rb-icon style=" margin-left: 12px; " v-if="option.open" :icon="'arrow1-down'" class="rb-icon--small u-color-grey-light"></rb-icon>
-            <rb-icon style=" margin-left: 12px; " v-if="!option.open" :icon="'arrow1-up'" class="rb-icon--small u-color-grey-light"></rb-icon>
+            <rb-icon style=" margin-left: 12px; " v-if="!option.open" :icon="'arrow1-down'" class="rb-icon--small u-color-grey-light"></rb-icon>
+            <rb-icon style=" margin-left: 12px; " v-if="option.open" :icon="'arrow1-up'" class="rb-icon--small u-color-grey-light"></rb-icon>
           </p>
           <div
             v-show="option.open"
@@ -102,7 +102,6 @@ import { tippy } from "vue-tippy";
     };
   },
   created() {
-    console.log(this.groupByKey);
     if (this.groupByKey) {
       this.options_ = this.options.reduce((acc, item) => {
         if (acc[item[this.groupByKey]]) {
@@ -115,7 +114,6 @@ import { tippy } from "vue-tippy";
         }
         return acc;
       }, {});
-      console.log(this.options_);
     } else {
       this.options_ = this.options;
     }
@@ -127,16 +125,13 @@ import { tippy } from "vue-tippy";
     this.$nextTick(() => {
         const button = document.querySelector("#" + this.id);
         if (button) {
-          console.log(this.id, button)
           tippy(button);
           this.instance = button._tippy;
-          console.log(this.instance, this.selected, this.value);
         }
     })
   },
   methods: {
     clicked(data) {
-      console.log(data, this.selected);
       this.$emit("input", data);
       this.$emit("onChange", data);
       this.instance?.hide();
@@ -159,7 +154,6 @@ import { tippy } from "vue-tippy";
           }
           return acc;
         }, {});
-        console.log(this.options_);
       } else {
         this.options_ = [...newValue];
       }
