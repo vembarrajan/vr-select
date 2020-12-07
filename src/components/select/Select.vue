@@ -31,9 +31,9 @@
         }"
     >
       <div
-        v-for="option in options_"
+        v-for="(option, $index) in options_"
         :id="option.label"
-        :key="option.label"
+        :key="$index"
         @click="clicked(option)"
         v-if="!groupByKey"
         class="select__dropdown-list-item"
@@ -47,7 +47,7 @@
       <div
         v-for="(option, value, $index) in options_"
         :id="option.label"
-        :key="option.label"
+        :key="$index"
         v-if="groupByKey"
         style="margin: 8px 0px"
       >
@@ -64,8 +64,8 @@
           </p>
           <div
             v-show="option.open"
-            v-for="item in option.list"
-            :key="item.label"
+            v-for="(item, $listIndex) in option.list"
+            :key="$listIndex"
             @click="clicked(item)"
             class="select__dropdown-list-item"
           >
@@ -142,8 +142,9 @@ import { tippy } from "vue-tippy";
   },
   watch: {
     options(newValue) {
+      console.log(newValue);
       if (this.groupByKey) {
-        this.options_ = this.options.reduce((acc, item) => {
+        this.options_ = newValue.reduce((acc, item) => {
           if (acc[item[this.groupByKey]]) {
             acc[item[this.groupByKey]]["list"].push(item);
           } else {
