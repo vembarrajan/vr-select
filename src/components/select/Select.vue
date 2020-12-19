@@ -18,6 +18,8 @@
       placement="bottom-start"
       animationFill="false"
       animation="fade"
+      @hide="onHide"
+      @show="onShow"
       :duration='0'
       popperOptions="{
           modifiers: {
@@ -127,6 +129,7 @@ import { tippy } from "vue-tippy";
         if (button) {
           tippy(button);
           this.instance = button._tippy;
+          // this.instance.onHidden = this.onHidden;
         }
     })
   },
@@ -139,10 +142,15 @@ import { tippy } from "vue-tippy";
     onMount(data) {
       console.log(data, "onMount");
     },
+    onHide() {
+      this.$emit("onHide", this.instance);
+    },
+    onShow() {
+      this.$emit("onShow", this.instance);
+    }
   },
   watch: {
     options(newValue) {
-      console.log(newValue);
       if (this.groupByKey) {
         this.options_ = newValue.reduce((acc, item) => {
           if (acc[item[this.groupByKey]]) {
