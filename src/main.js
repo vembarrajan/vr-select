@@ -1,9 +1,9 @@
 /* eslint-disable */
-import Button from "./components/button";
-import Select from "./components/select";
+import Select from "./components/select/index.js";
+import App from './App.vue';
+import Vue from 'vue';
 
 const components = {
-  Button,
   Select
 };
 
@@ -16,5 +16,11 @@ components.install = (Vue, options = {}) => {
     }
   }
 };
+
+new Vue({
+  el: '#app',
+  components: { App },
+  template: '<App/>'
+});
 
 export default components;

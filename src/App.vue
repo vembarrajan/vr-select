@@ -1,21 +1,18 @@
 <template>
   <div id="app" style="height: 100vh">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-    <VrSelect v-model="selected" :options="options"/>
-    {{ selected }}
+    <HelloWorld msg="Welcome to vr-select component" />
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import HelloWorld from "./components/HelloWorld.vue";
-import VrSelect from "./components/VrSelect.vue";
+import HelloWorld from "./components/HelloWorld";
+
 export default {
   name: "App",
   components: {
     HelloWorld,
-    VrSelect,
   },
   data() {
     return {
@@ -42,12 +39,15 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  padding: 0px;
+  margin: 0px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
