@@ -1,9 +1,10 @@
 /* eslint-disable */
 <template>
+  <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
   <div class="vr-select-container">
     <div class="select-container" v-if="id" :name="id" :id="id">
       <slot name="trigger" class="triggerWrapper">
-        <p>{{ value && value.label }} Slot for Trigger</p>
+        <p>{{ value && value.label }} Slot for Trigger {{ id }}</p>
       </slot>
     </div>
     <tippy
@@ -20,7 +21,7 @@
       animation="fade"
       @hide="onHide"
       @show="onShow"
-      :duration='0'
+      :duration="0"
       popperOptions="{
           modifiers: {
             preventOverflow: {
@@ -40,11 +41,11 @@
         v-if="!groupByKey"
         class="select__dropdown-list-item"
       >
-      <slot v-bind="option" name="item">
-        <div slot="label">
-          {{ option.label }}
-        </div>
-      </slot>
+        <slot v-bind="option" name="item">
+          <div slot="label">
+            {{ option.label }}
+          </div>
+        </slot>
       </div>
       <div
         v-for="(option, value, $index) in options_"
@@ -58,11 +59,21 @@
             @click="option.open = !option.open"
             v-show="value != 'undefined'"
             class="select__dropdown-list-heading"
-            style=" display: flex; justify-content: space-between; "
+            style="display: flex; justify-content: space-between"
           >
             {{ value }}
-            <rb-icon style=" margin-left: 12px; " v-if="!option.open" :icon="'arrow1-down'" class="rb-icon--small u-color-grey-light"></rb-icon>
-            <rb-icon style=" margin-left: 12px; " v-if="option.open" :icon="'arrow1-up'" class="rb-icon--small u-color-grey-light"></rb-icon>
+            <rb-icon
+              style="margin-left: 12px"
+              v-if="!option.open"
+              :icon="'arrow1-down'"
+              class="rb-icon--small u-color-grey-light"
+            ></rb-icon>
+            <rb-icon
+              style="margin-left: 12px"
+              v-if="option.open"
+              :icon="'arrow1-up'"
+              class="rb-icon--small u-color-grey-light"
+            ></rb-icon>
           </p>
           <div
             v-show="option.open"
@@ -85,8 +96,11 @@
 <script>
 /* eslint-disable */
 import { tippy } from "vue-tippy";
-  export default {
+export default {
   name: "VrSelect",
+  components: {
+    tippy,
+  },
   props: {
     msg: String,
     options: Array,
@@ -123,15 +137,15 @@ import { tippy } from "vue-tippy";
   mounted() {
     // const button = document.querySelector(this.id);
     // const instance = tippy(button);
-    this.id = 'vrSelect' + Math.floor(Math.random() * 1000 );
+    this.id = "vrSelect" + Math.floor(Math.random() * 1000);
     this.$nextTick(() => {
-        const button = document.querySelector("#" + this.id);
-        if (button) {
-          tippy(button);
-          this.instance = button._tippy;
-          // this.instance.onHidden = this.onHidden;
-        }
-    })
+      const button = document.querySelector("#" + this.id);
+      if (button) {
+        tippy(button);
+        this.instance = button._tippy;
+        // this.instance.onHidden = this.onHidden;
+      }
+    });
   },
   methods: {
     clicked(data) {
@@ -147,7 +161,7 @@ import { tippy } from "vue-tippy";
     },
     onShow() {
       this.$emit("onShow", this.instance);
-    }
+    },
   },
   watch: {
     options(newValue) {
@@ -193,9 +207,8 @@ import { tippy } from "vue-tippy";
 }
 
 .vr-select-dropdown-theme {
-  .tippy-content{
+  .tippy-content {
     min-width: 230px;
   }
 }
-
 </style>
